@@ -1,5 +1,4 @@
-#singletone
-
+import threading
 
 MONEY_DICT={
             'bils':{
@@ -15,8 +14,20 @@ MONEY_DICT={
             }
         }
 
-
 class CashInventory():
+
+    __singleton_lock = threading.Lock()
+    __singleton_instance = None
+
+    @classmethod
+    def instance(cls):
+        if not cls.__singleton_instance:
+            with cls.__singleton_lock:
+                if not cls.__singleton_instance:
+                    cls.__singleton_instance = cls()
+        return cls.__singleton_instance
+
+
     def __init__(self,one=0, two=0, five=0,ten=0, twenty=0, fifty=0, hundred=0, two_hundred=0):
         self.one = one
         self.two = two
@@ -44,14 +55,12 @@ class CashInventory():
         }
         return balance_dictionary
 
-
     def insert(self, given_value):
         for type in MONEY_DICT.keys():
             for key, value in MONEY_DICT[type].items():
                 if given_value == value:
                     self.__setattr__(f"{key}", self.__getattribute__(f"{key}")+1)
                     return
-
 
     def produce_change(self, value, price):
         change_needed = value - price

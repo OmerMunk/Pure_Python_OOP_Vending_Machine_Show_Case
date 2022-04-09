@@ -67,3 +67,20 @@ class MoneyError(PaymentErrors):
         massage = "We're sorry, the type of money that you've inserted is unacceptable or corrupted, try again or " \
                   "something else "
         super().__init__(massage)
+
+
+
+class MachineErrors(VendingMachineExceptions):
+    """A base class for all machine errors"""
+
+    def __init__(self, massage, machine_element=None):
+        self.element = machine_element
+        self.massage = massage
+
+
+class MachineEmpty(ProductErrors):
+    """This exception will raise if the machine is empty."""
+
+    def __init__(self):
+        massage = "The machine is currently empty"
+        super().__init__(massage)
